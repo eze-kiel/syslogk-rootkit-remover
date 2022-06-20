@@ -16,12 +16,14 @@ int main(int argc, char **argv)
         printf("%s does not exist\n", fname);
         return EXIT_SUCCESS;
     }
-
+	
+	/* reveal the rootkit in case of failure after */
 	int fd = open(fname, O_WRONLY);
 	lseek(fd, 0 , SEEK_SET);
 	write(fd, "1", 1);
 	close(fd);
 
+	/* try to remove the kernel module */
     if (delete_module(fname, O_NONBLOCK) != 0) {
         printf("failed deleting %s\n", fname);
         return EXIT_FAILURE;
